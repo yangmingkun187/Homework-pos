@@ -20,3 +20,5 @@ Item.loadAllItem = function() {
     new Item('ITEM000006', '羽毛球', '个', 1.00, '')
   ];
 };
+
+module.exports = Item;
