@@ -1,7 +1,4 @@
-jest.dontMock('../src/model/scanner');
-jest.dontMock('../src/model/item');
-jest.dontMock('../src/model/cart-item');
-jest.dontMock('lodash');
+jest.autoMockOff();
 
 describe('Scanner', function() {
   describe('#scan', function() {
@@ -9,16 +6,15 @@ describe('Scanner', function() {
       var Scanner = require('../src/model/scanner');
       var Item = require('../src/model/item');
       var scanner = new Scanner(Item.loadAllItem());
-      var tag = {'ITEM000003': 2};
+      var tag = {'ITEM000003': 12};
 
       var cartItem = scanner.scan(tag);
-      expect(cartItem).toEqual( {count: 2,
-                                 item: {barcode: 'ITEM000003',
-                                        brand: '云山',
-                                        name: '云山荔枝',
-                                        price: 15,
-                                        unit: '斤'}
-        });
+      expect(cartItem.item).toEqual({ barcode: 'ITEM000003',
+                                      name: '云山荔枝',
+                                      unit: '斤',
+                                      price: 15,
+                                      brand: '云山' });
+      expect(cartItem.count).toBe(12);                                
     });
   });
 });
