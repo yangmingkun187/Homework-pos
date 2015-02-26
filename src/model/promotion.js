@@ -12,7 +12,7 @@ Promotion.loadBrandPromotions = function () {
 
 Promotion.loadSinglePromotions = function () {
   return [
-    new Promotion('可口可乐350Ml', 0.95),
+    new Promotion('可口可乐350ml', 0.95),
     new Promotion('雪碧', 0.95),
   ];
 };
