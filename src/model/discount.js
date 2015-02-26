@@ -5,34 +5,24 @@ function Discount() {
 
 }
 
-Discount.brandDiscountToString = function(cartItems, brand, type) {
-  return '名称：' + brand + type + '，金额：' + Discount.getBrandDiscountSaved(cartItems) + '元';
-};
-
-Discount.getBrandDiscountSaved = function(cartItems) {
+Discount.brandDiscountToString = function(cartItems) {
   var brandDiscountSaved = 0;
-  var brandPromotions = Discount.getBrandPromotions();
+  var brandPromotions = Promotion.loadBrandPromotions();
+  var text = '';
 
-  _.forEach(cartItems, function(cartItem) {
-    _.forEach(brandPromotions, function(brandPromotion) {
+  _.forEach(brandPromotions, function(brandPromotion) {
+    _.forEach(cartItems, function(cartItem) {
       if(cartItem.item.brand === brandPromotion.discountTag) {
         brandDiscountSaved += cartItem.item.price * cartItem.count * (1 - brandPromotion.discountRate);
       }
     });
-  });
-  return brandDiscountSaved.toFixed(2);
-};
-
-Discount.getBrandPromotions = function () {
-  var promotions = Promotion.loadPromotions();
-  var brandPromotions = [];
-  _.forEach(promotions, function(brandPromotion) {
-    if(brandPromotion.type === '品牌打折') {
-      brandPromotions.push(brandPromotion);
+    if(brandDiscountSaved !== 0) {
+      text += '名称：' + brandPromotion.discountTag + '品牌打折，金额：' +
+      brandDiscountSaved.toFixed(2) + '元\n';
     }
+    brandDiscountSaved = 0;
   });
-  console.log(brandPromotions);
-  return brandPromotions;
+  return text;
 };
 
 module.exports = Discount;

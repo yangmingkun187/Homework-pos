@@ -1,14 +1,19 @@
-function Promotion(type, discountTag, discountRate) {
-  this.type = type;
+function Promotion(discountTag, discountRate) {
   this.discountTag = discountTag;
   this.discountRate = discountRate;
 }
 
-Promotion.loadPromotions = function () {
+Promotion.loadBrandPromotions = function () {
   return [
-    new Promotion('品牌打折', '可口可乐', 0.9),
-    new Promotion('单品打折', '可口可乐350Ml', 0.95),
-    new Promotion('单品打折', '雪碧', 0.95),
+    new Promotion('可口可乐', 0.9),
+    new Promotion('测试', 0.8),
+  ];
+};
+
+Promotion.loadSinglePromotions = function () {
+  return [
+    new Promotion('可口可乐350Ml', 0.95),
+    new Promotion('雪碧', 0.95),
   ];
 };
 
