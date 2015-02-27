@@ -6,7 +6,6 @@ function Promotion(discountTag, discountRate) {
 Promotion.loadBrandPromotions = function () {
   return [
     new Promotion('可口可乐', 0.9),
-    new Promotion('测试', 0.8),
   ];
 };
 
