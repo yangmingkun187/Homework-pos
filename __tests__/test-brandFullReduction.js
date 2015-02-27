@@ -1,7 +1,7 @@
 jest.autoMockOff();
 
 describe('brandFullReduction', function() {
-  describe('#brandfullReductionToString', function() {
+  describe('#brandFullReductionToString', function() {
     it('it should return corrcet string', function() {
       var BrandFullReduction = require('../src/model/full-reduction/brand-full-reduction');
       var brandFullReduction = new BrandFullReduction();
@@ -17,7 +17,7 @@ describe('brandFullReduction', function() {
       count: 25,
       getPrice: getPrice2},];
 
-      var text = brandFullReduction.brandfullReductionToString(brandFRCartItems, '康师傅', 100, 2);
+      var text = brandFullReduction.brandFullReductionToString(brandFRCartItems, '康师傅', 100, 2);
       expect(text).toBe('名称：康师傅品牌满100减2，金额：4.00元\n');
     });
   });
