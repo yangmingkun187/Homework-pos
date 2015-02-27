@@ -1,9 +1,10 @@
-jest.dontMock('../src/model/cart-item');
+jest.autoMockOff();
 
 describe('cartItem', function() {
   describe('#printCartItemText', function() {
     it('it should return corrcet string', function() {
       var CartItem = require('../src/model/cart-item');
+
       var cartItem = new CartItem({barcode: 'ITEM000003',
                                    brand: '云山',
                                    name: '云山荔枝',

@@ -1,11 +1,20 @@
 function CartItem(item, count) {
   this.item = item;
   this.count = count || 0;
-  this.savedPrice = 0;
+  this.promotion = '';
+  this.savedMoney = 0;
 }
 
+CartItem.prototype.getBrand = function() {
+  return this.item.brand;
+};
+
+CartItem.prototype.getPrice = function() {
+  return this.item.price;
+};
+
 CartItem.prototype.getSubtotal = function () {
-  return this.item.price * this.count - this.savedPrice;
+  return this.item.price * this.count - this.savedMoney;
 };
 
 CartItem.prototype.printCartItemText = function () {

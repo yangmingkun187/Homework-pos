@@ -1,5 +1,4 @@
-function FullReductionPromotion(type, promotionTag, refPrice, savedPrice) {
-  this.type = type;
+function FullReductionPromotion(promotionTag, refPrice, savedPrice) {
   this.promotionTag = promotionTag;
   this.refPrice = refPrice;
   this.savedPrice = savedPrice;
@@ -7,8 +6,7 @@ function FullReductionPromotion(type, promotionTag, refPrice, savedPrice) {
 
 FullReductionPromotion.loadFullReducePromotions = function() {
   return [
-    new FullReductionPromotion('单品', '云山苹果', 100, 5),
-    new FullReductionPromotion('品牌', '康师傅', 100, 2),
+    new FullReductionPromotion('康师傅', 100, 2),
   ];
 };
 
