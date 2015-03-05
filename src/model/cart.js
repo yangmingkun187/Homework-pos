@@ -65,3 +65,5 @@ Cart.prototype.getSingleFRCartItem = function (name) {
   });
   return SingleFRCartItem;
 };
+
+module.exports = Cart;
