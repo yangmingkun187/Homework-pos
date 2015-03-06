@@ -4,8 +4,7 @@ function WholeDiscount() {
 
 WholeDiscount.prototype.wholeDiscountToString = function (cartItems, rate, noDiscount) {
   var savedMoney = this.getWholeDiscountSaved(cartItems, rate, noDiscount);
-  return '名称：满' + topNum + '减' + savingNum +
-  '，金额：' + savedMoney.toFixed(2) + '元\n';
+  return '名称：九折，金额：' + savedMoney.toFixed(2) + '元\n';
 };
 
 WholeDiscount.prototype.getWholeDiscountSaved = function (cartItems, rate, noDiscount) {

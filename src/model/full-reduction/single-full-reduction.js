@@ -4,7 +4,7 @@ function SingleFullReduction() {
 
 }
 
-SingleFullReduction.prototype.SingleFullReductionToString = function (singleFRCartItems, name, refPrice, savedPrice) {
+SingleFullReduction.prototype.singleFullReductionToString = function (singleFRCartItems, name, refPrice, savedPrice) {
   var text = '';
   text = '名称：' + name + '满' + refPrice +
     '减' + savedPrice +'，金额：' + this.getSingleFullReductionSaved(singleFRCartItems, refPrice, savedPrice) + '元\n';

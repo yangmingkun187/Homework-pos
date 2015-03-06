@@ -4,6 +4,18 @@ function BrandDiscount() {
 
 }
 
+BrandDiscount.prototype.getBrandDiscountCartItems = function (cartItems, brand) {
+  var brandDiscountCartItems = [];
+
+  _.forEach(cartItems, function(cartItem) {
+    if (cartItem.getBrand() === brand) {
+      cartItem.promotion = '品牌打折';
+      brandDiscountCartItems.push(cartItem);
+    }
+  });
+  return brandDiscountCartItems;
+};
+
 BrandDiscount.prototype.getBrandDiscountSaved = function(brandCartItems, rate) {
   var brandDiscountSaved = 0;
 

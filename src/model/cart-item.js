@@ -9,7 +9,11 @@ CartItem.prototype.getBrand = function() {
   return this.item.brand;
 };
 
-CartItem.prototype.getPrice = function() {
+CartItem.prototype.getName = function () {
+  return this.item.name;
+};
+
+CartItem.prototype.getPrice = function () {
   return this.item.price;
 };
 

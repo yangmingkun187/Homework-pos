@@ -13,7 +13,7 @@ describe('singleFullReduction', function() {
       count: 40,
       getPrice: getPrice};
 
-      var text = singleFullReduction.SingleFullReductionToString(singleFRCartItems, '果粒橙', 100, 5);
+      var text = singleFullReduction.singleFullReductionToString(singleFRCartItems, '果粒橙', 100, 5);
       expect(text).toBe('名称：果粒橙满100减5，金额：5.00元\n');
     });
   });
