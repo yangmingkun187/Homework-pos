@@ -4,14 +4,14 @@ function SingleFullReduction() {
 
 }
 
-SingleFullReduction.prototype.singleFullReductionToString = function (singleFRCartItems, name, refPrice, savedPrice) {
+SingleFullReduction.singleFullReductionToString = function (singleFRCartItems, name, refPrice, savedPrice) {
   var text = '';
   text = '名称：' + name + '满' + refPrice +
     '减' + savedPrice +'，金额：' + this.getSingleFullReductionSaved(singleFRCartItems, refPrice, savedPrice) + '元\n';
   return text;
 };
 
-SingleFullReduction.prototype.getSingleFullReductionSaved = function (singleFRCartItem, refPrice, savedPrice) {
+SingleFullReduction.getSingleFullReductionSaved = function (singleFRCartItem, refPrice, savedPrice) {
   var singleFullReductionSaved = 0;
   var totalMoney = 0;
 

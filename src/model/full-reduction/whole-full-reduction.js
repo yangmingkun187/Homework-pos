@@ -16,7 +16,7 @@ WholeFullReduction.wholeFullReductionToString = function (cartItems, refPrice, s
 WholeFullReduction.getWholeFullReductionSaved = function (cartItems, refPrice, savedPrice, noPromotion) {
   var savedMoney = 0;
   var totalMoney = 0;
-  console.log(cartItems);
+
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() !== noPromotion) {
       totalMoney += cartItem.getPrice() * cartItem.count;

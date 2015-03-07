@@ -3,6 +3,10 @@ var Cart = require('../cart');
 var BrandDiscount = require('../discount/brandDiscount');
 var SingleDiscount = require('../discount/singleDiscount');
 var WholeFullReduction = require('../full-reduction/whole-full-reduction');
+var BrandFullReduction = require('../full-reduction/brand-full-reduction');
+var SingleFullReduction = require('../full-reduction/single-full-reduction');
+var FullReductionPromotion = require('../full-reduction/full-reduction-promotion');
+
 var _ = require('lodash');
 
 function Strategy() {
@@ -25,11 +29,10 @@ Strategy.getStrategyOneText = function(cartItems) {
   });
 
   _.forEach(singlePromotions, function(singlePromotion) {
-
     singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
     singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
   });
-  if(brandDiscountText !== '') {
+  if(brandCartItems) {
     promotionText += brandDiscountText;
   } else {
     promotionText += singleDiscountText;
@@ -40,6 +43,72 @@ Strategy.getStrategyOneText = function(cartItems) {
   wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
   promotionText += wholeFullReductionText;
   return promotionText;
+};
+
+Strategy.getStrategyTwoText = function(cartItems) {
+  var promotionText = '';
+  var brandDiscountText = '';
+  var singleDiscountText = '';
+  var brandFRCartItems = [];
+  var noPromotionCartItems = [];
+  var newSingleCartItem = [];
+
+  brandPromotions = Promotion.loadBrandPromotions();
+  singlePromotions = Promotion.loadSinglePromotions();
+  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
+  singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
+
+  _.forEach(singlePromotions, function(singlePromotion) {
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+  });
+
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    newSingleCartItem.push(singleCartItem);
+
+    var newBrandCartItem = _.difference(brandCartItems, newSingleCartItem);
+    brandDiscountText += BrandDiscount.brandDiscountToString(newBrandCartItem, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+
+    promotionText += singleDiscountText;
+    promotionText += brandDiscountText;
+
+  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
+    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
+    promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
+
+  });
+
+  _.forEach(singleFRPromotions, function(singleFRPromotion) {
+    singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
+    promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
+  });
+
+  return promotionText;
+};
+
+Strategy.getBrandFRCartItems = function (cartItems, brand) {
+  var brandFRCartItems = [];
+  _.forEach(cartItems, function (cartItem) {
+    if(cartItem.getBrand() === brand) {
+      cartItem.promotion = '满即减';
+      brandFRCartItems.push(cartItem);
+    }
+  });
+
+  return brandFRCartItems;
+};
+
+Strategy.getSingleFRCartItem = function (cartItems, name) {
+  var SingleFRCartItem;
+  _.forEach(cartItems, function(cartItem) {
+    if(cartItem.getName() === name) {
+      cartItem.promotion = '单品满即减';
+      SingleFRCartItem = cartItem;
+    }
+  });
+  return SingleFRCartItem;
 };
 
 Strategy.getBrandDiscountCartItems = function (cartItems, brand) {
@@ -55,7 +124,7 @@ Strategy.getBrandDiscountCartItems = function (cartItems, brand) {
 };
 
 Strategy.getSingleDiscountCartItem = function (cartItems, name) {
-  var SingleDiscountCartItem = {};
+  var SingleDiscountCartItem;
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() === name) {
       cartItem.promotion = '单品打折';

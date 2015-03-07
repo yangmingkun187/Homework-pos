@@ -10,4 +10,10 @@ FullReductionPromotion.loadFullReducePromotions = function() {
   ];
 };
 
+FullReductionPromotion.loadSingleFRPromotions = function() {
+  return [
+  new FullReductionPromotion('云山荔枝', 100, 5),
+  ];
+};
+
 module.exports = FullReductionPromotion;
