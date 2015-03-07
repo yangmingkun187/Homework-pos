@@ -15,37 +15,57 @@ Strategy.getStrategyOneText = function(cartItems) {
   var singleDiscountText = '';
   var brandCartItems = [];
   var noPromotionCartItems = [];
-  brandDiscount = new BrandDiscount();
-  singleDiscount = new SingleDiscount();
-  wholeFullReduction = new WholeFullReduction();
+
   brandPromotions = Promotion.loadBrandPromotions();
   singlePromotions = Promotion.loadSinglePromotions();
 
   _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = brandDiscount.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    brandDiscountText += brandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandCartItems.promotion, brandPromotion.discountRate);
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    brandDiscountText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
   });
 
   _.forEach(singlePromotions, function(singlePromotion) {
 
-    singleCartItem = singleDiscount.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    singleDiscountText += singleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
   });
   if(brandDiscountText !== '') {
     promotionText += brandDiscountText;
-    singleCartItem.promotion = '';
   } else {
     promotionText += singleDiscountText;
   }
 
-  noPromotionCartItems = this.getNoPromotionCartItems(cartItems);
+  noPromotionCartItems = Strategy.getNoPromotionCartItems(cartItems);
 
-  wholeFullReductionText = wholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
+  wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
   promotionText += wholeFullReductionText;
   return promotionText;
 };
 
-Strategy.prototype.getNoPromotionCartItems = function (cartItems) {
+Strategy.getBrandDiscountCartItems = function (cartItems, brand) {
+  var brandDiscountCartItems = [];
+
+  _.forEach(cartItems, function(cartItem) {
+    if (cartItem.getBrand() === brand) {
+      cartItem.promotion = '品牌打折';
+      brandDiscountCartItems.push(cartItem);
+    }
+  });
+  return brandDiscountCartItems;
+};
+
+Strategy.getSingleDiscountCartItem = function (cartItems, name) {
+  var SingleDiscountCartItem = {};
+  _.forEach(cartItems, function(cartItem) {
+    if(cartItem.getName() === name) {
+      cartItem.promotion = '单品打折';
+      SingleDiscountCartItem = cartItem;
+    }
+  });
+  return SingleDiscountCartItem;
+};
+
+Strategy.getNoPromotionCartItems = function (cartItems) {
   var noPromotionCartItems = [];
   _.forEach(cartItems, function (cartItem) {
     if(cartItem.promotion === '') {

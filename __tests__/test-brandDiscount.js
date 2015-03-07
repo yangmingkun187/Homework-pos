@@ -4,19 +4,14 @@ describe('BrandDiscount', function() {
   describe('#brandDiscountToString', function() {
     it('it should return corrcet string', function() {
       var BrandDiscount = require('../src/model/discount/brandDiscount');
-      var brandDiscount = new BrandDiscount();
-      getPrice = jest.genMockFn();
-      getPrice.mockReturnValue(3);
+      var CartItem = require('../src/model/cart-item');
+      var Item = require('../src/model/item');
 
-      brandCartItems = [{item: {barcode: 'ITEM000000', name: '可口可乐350ml', unit: '瓶', price: 3.00, brand: '可口可乐'},
-                    count: 20,
-                    getPrice: getPrice},
-                   {item: {barcode: 'ITEM000010', name: '可口可乐550ml', unit: '瓶', price: 3.00, brand: '可口可乐'},
-                    count: 20,
-                    getPrice: getPrice},];
+      brandCartItems = [new CartItem(Item.loadAllItem()[0], 20),
+                        new CartItem(Item.loadAllItem()[1], 20)];
 
-      var text = brandDiscount.brandDiscountToString(brandCartItems, '可口可乐', '品牌打折', 0.9);
-      expect(text).toBe('名称：可口可乐品牌打折，金额：12.00元\n');
+      var text = BrandDiscount.brandDiscountToString(brandCartItems, '可口可乐', 0.9);
+      expect(text).toBe('名称：可口可乐品牌打折，金额：14.00元\n');
     });
   });
 });

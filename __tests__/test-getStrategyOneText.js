@@ -9,12 +9,11 @@ describe('strategy', function() {
 
       var cartItems = [ new CartItem(Item.loadAllItem()[0], 20),
                     new CartItem(Item.loadAllItem()[1], 20),
-                    new CartItem(Item.loadAllItem()[5], 30),
-                    new CartItem(Item.loadAllItem()[7], 12)
+                    new CartItem(Item.loadAllItem()[5], 12),
+                    new CartItem(Item.loadAllItem()[7], 30)
                     ];
       var text = Strategy.getStrategyOneText(cartItems);
-      expect(text).toBe('名称：可口可乐品牌打折，金额：14.00元\n' +
-        '名称：满100减3，金额：3.00元\n');
+      expect(text).toBe('名称：可口可乐品牌打折，金额：14.00元\n名称：满100减3，金额：3.00元\n');
     });
   });
 });

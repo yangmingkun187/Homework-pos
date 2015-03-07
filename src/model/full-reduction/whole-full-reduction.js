@@ -4,20 +4,23 @@ function WholeFullReduction() {
 
 }
 
-WholeFullReduction.prototype.wholeFullReductionToString = function (cartItems, refPrice, savedPrice, noPromotion) {
+WholeFullReduction.wholeFullReductionToString = function (cartItems, refPrice, savedPrice, noPromotion) {
   var text = '';
-  var savedMoney = this.getWholeFullReductionSaved(cartItems, refPrice, savedPrice, noPromotion);
+  var savedMoney = WholeFullReduction.getWholeFullReductionSaved(cartItems, refPrice, savedPrice, noPromotion);
   if(savedMoney > 0) {
-    text += '名称：满' + refPrice + '减' + savedPrice + '，金额：' + savedMoney + '元';
+    text += '名称：满' + refPrice + '减' + savedPrice + '，金额：' + savedMoney + '元\n';
   }
   return text;
 };
 
-WholeFullReduction.prototype.getWholeFullReductionSaved = function (cartItems, refPrice, savedPrice, noPromotion) {
+WholeFullReduction.getWholeFullReductionSaved = function (cartItems, refPrice, savedPrice, noPromotion) {
   var savedMoney = 0;
   var totalMoney = 0;
+  console.log(cartItems);
   _.forEach(cartItems, function(cartItem) {
-    totalMoney += cartItem.getPrice() * cartItem.count;
+    if(cartItem.getName() !== noPromotion) {
+      totalMoney += cartItem.getPrice() * cartItem.count;
+    }
   });
   savedMoney = parseInt(totalMoney / refPrice) * savedPrice;
 
