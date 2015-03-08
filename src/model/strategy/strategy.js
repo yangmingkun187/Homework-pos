@@ -155,6 +155,7 @@ Strategy.getStrategyFourText = function(cartItems) {
   promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, '云山', 100, 2);
 
   promotionText += WholeDiscount.wholeDiscountToString(cartItems, 0.9, '雪碧');
+
   return promotionText;
 };
 

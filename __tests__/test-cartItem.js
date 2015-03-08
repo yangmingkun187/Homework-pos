@@ -11,7 +11,7 @@ describe('cartItem', function() {
                                    price: 15,
                                    unit: '斤'}, 12);
       var text = cartItem.printCartItemText();
-      expect(text).toBe('名称：云山荔枝，数量：12斤，单价：15.00(元)，小计：180.00(元)');
+      expect(text).toBe('名称：云山荔枝，数量：12斤，单价：15.00(元)，小计：180.00(元)\n');
     });
   });
 });
