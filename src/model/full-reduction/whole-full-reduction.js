@@ -19,7 +19,7 @@ WholeFullReduction.getWholeFullReductionSaved = function (cartItems, refPrice, s
 
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() !== noPromotion) {
-      totalMoney += cartItem.getPrice() * cartItem.count;
+      totalMoney += cartItem.getPrice() * cartItem.count - cartItem.savedMoney;
     }
   });
   savedMoney = parseInt(totalMoney / refPrice) * savedPrice;

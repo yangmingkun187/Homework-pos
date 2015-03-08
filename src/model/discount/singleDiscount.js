@@ -13,8 +13,9 @@ SingleDiscount.singleDiscountToString = function (SingleCartItem, name, promotio
 
 SingleDiscount.getSingleDiscountSaved = function (SingleCartItem, rate) {
   var SingleDiscountSaved = 0;
-  SingleDiscountSaved = SingleCartItem.getPrice() * SingleCartItem.count * (1 - rate);
-  
+  SingleCartItem.savedMoney = SingleCartItem.getPrice() * SingleCartItem.count * (1 - rate);
+  SingleDiscountSaved = SingleCartItem.savedMoney;
+
   return SingleDiscountSaved.toFixed(2);
 };
 

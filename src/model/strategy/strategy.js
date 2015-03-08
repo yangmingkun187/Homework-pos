@@ -88,6 +88,42 @@ Strategy.getStrategyTwoText = function(cartItems) {
   return promotionText;
 };
 
+Strategy.getStrategyThreeText = function (cartItems) {
+  var brandDiscountText = '';
+  var singleDiscountText = '';
+  var promotionText = '';
+  var wholeFullReductionText = '';
+  var brandFRCartItems = [];
+
+  brandPromotions = Promotion.loadBrandPromotions();
+  singlePromotions = Promotion.loadSinglePromotions();
+
+  _.forEach(singlePromotions, function(singlePromotion) {
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+  });
+
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    brandDiscountText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+
+  promotionText += singleDiscountText;
+  promotionText += brandDiscountText;
+
+  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
+
+  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
+    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
+    promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
+  });
+
+  wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(cartItems, 100, 5, '云山苹果');
+  promotionText += wholeFullReductionText;
+
+  return promotionText;
+};
+
 Strategy.getBrandFRCartItems = function (cartItems, brand) {
   var brandFRCartItems = [];
   _.forEach(cartItems, function (cartItem) {
