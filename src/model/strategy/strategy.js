@@ -3,6 +3,7 @@ var Cart = require('../cart');
 var BrandDiscount = require('../discount/brandDiscount');
 var SingleDiscount = require('../discount/singleDiscount');
 var WholeFullReduction = require('../full-reduction/whole-full-reduction');
+var WholeDiscount = require('../discount/wholeDiscount');
 var BrandFullReduction = require('../full-reduction/brand-full-reduction');
 var SingleFullReduction = require('../full-reduction/single-full-reduction');
 var FullReductionPromotion = require('../full-reduction/full-reduction-promotion');
@@ -121,6 +122,39 @@ Strategy.getStrategyThreeText = function (cartItems) {
   wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(cartItems, 100, 5, '云山苹果');
   promotionText += wholeFullReductionText;
 
+  return promotionText;
+};
+
+Strategy.getStrategyFourText = function(cartItems) {
+  var brandDiscountText = '';
+  var singleDiscountText = '';
+  var promotionText = '';
+  var wholeFullReductionText = '';
+  var brandFRCartItems = [];
+
+  brandPromotions = Promotion.loadBrandPromotions();
+  singlePromotions = Promotion.loadSinglePromotions();
+
+  _.forEach(singlePromotions, function(singlePromotion) {
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+  });
+
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    brandDiscountText += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+
+  promotionText += singleDiscountText;
+  promotionText += brandDiscountText;
+
+  singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, '果粒橙');
+  promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, '果粒橙', 100, 5);
+
+  brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, '云山');
+  promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, '云山', 100, 2);
+
+  promotionText += WholeDiscount.wholeDiscountToString(cartItems, 0.9, '雪碧');
   return promotionText;
 };
 

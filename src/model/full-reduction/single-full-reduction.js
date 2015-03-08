@@ -16,7 +16,8 @@ SingleFullReduction.getSingleFullReductionSaved = function (singleFRCartItem, re
   var totalMoney = 0;
 
   totalMoney = singleFRCartItem.getPrice() * singleFRCartItem.count;
-  singleFullReductionSaved = parseInt(totalMoney / refPrice) * savedPrice;
+  singleFRCartItem.savedMoney = parseInt(totalMoney / refPrice) * savedPrice;
+  singleFullReductionSaved = singleFRCartItem.savedMoney;
 
   return singleFullReductionSaved.toFixed(2);
 };

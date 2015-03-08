@@ -14,9 +14,9 @@ WholeDiscount.getWholeDiscountSaved = function (cartItems, rate, noDiscount) {
   var discountTotal = 0;
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() !== noDiscount) {
-      discountTotal += cartItem.count * cartItem.getPrice();
+      discountTotal += cartItem.count * cartItem.getPrice() - cartItem.savedMoney;
     }
-    savedMoney = discountTotal * rate;
+    savedMoney = discountTotal * (1 - rate);
   });
   return savedMoney;
 };

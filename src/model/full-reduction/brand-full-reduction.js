@@ -11,9 +11,10 @@ BrandFullReduction.getBrandFullReductionSaved = function(brandFRCartItems, refPr
   _.forEach(brandFRCartItems, function(cartItem) {
     totalMoney += cartItem.getPrice() * cartItem.count;
   });
-
   BrandfullReductionSaved = parseInt(totalMoney / refPrice) * savedPrice;
-
+  _.forEach(brandFRCartItems, function(cartItem) {
+    cartItem.savedMoney = BrandfullReductionSaved / brandFRCartItems.length;
+  });
   return BrandfullReductionSaved.toFixed(2);
 };
 
