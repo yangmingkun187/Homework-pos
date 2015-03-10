@@ -47,13 +47,23 @@ Cart.prototype.getSavedText = function () {
   return '节省：' + this.getTotalSaved() + '(元)\n';
 };
 
-Cart.prototype.printText = function () {
+Cart.prototype.getStrategyType = function (StrategyType) {
+  switch (StrategyType) {
+    case 1 : return Strategy.getStrategyOneText(this.cartItems);
+    case 2 : return Strategy.getStrategyTwoText(this.cartItems);
+    case 3 : return Strategy.getStrategyThreeText(this.cartItems);
+    case 4 : return Strategy.getStrategyFourText(this.cartItems);
+    default : return '没有此优惠类型！';
+    }
+};
+
+Cart.prototype.printText = function (StrategyType) {
   return '***<没钱赚商店>购物清单***\n' + '打印时间：' +
   moment().format('YYYY年MM月DD日 HH:mm:ss') +
   '\n\n----------------------\n' +
   this.getList() +
   '\n----------------------\n' + '优惠信息：\n' +
-  Strategy.getStrategyFourText(this.cartItems) +
+  this.getStrategyType(StrategyType) +
   '\n----------------------\n' +
   this.getTotalText() +
   this.getSavedText() +

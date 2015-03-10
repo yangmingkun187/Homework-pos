@@ -8,8 +8,10 @@ BrandDiscount.getBrandDiscountSaved = function(brandCartItems, rate) {
   var brandDiscountSaved = 0;
 
   _.forEach(brandCartItems, function(cartItem) {
-    cartItem.savedMoney = (cartItem.getPrice() * cartItem.count - cartItem.savedMoney) * (1 - rate);
-    brandDiscountSaved += cartItem.savedMoney;
+    brandDiscountSaved += (cartItem.getPrice() * cartItem.count - cartItem.savedMoney) * (1 - rate);
+  });
+  _.forEach(brandCartItems, function(cartItem) {
+    cartItem.savedMoney += (cartItem.getPrice() * cartItem.count - cartItem.savedMoney) * (1 - rate);
   });
 
   return brandDiscountSaved.toFixed(2);

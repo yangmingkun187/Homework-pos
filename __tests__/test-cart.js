@@ -14,7 +14,7 @@ describe('cart', function() {
                         new CartItem(Item.loadAllItem()[3], 40),
                         new CartItem(Item.loadAllItem()[5], 8),
                         new CartItem(Item.loadAllItem()[4], 14)];
-      var result = cart.printText();
+      var result = cart.printText(4);
       expect(result).toBe('***<没钱赚商店>购物清单***\n打印时间：' +
       moment().format('YYYY年MM月DD日 HH:mm:ss') + '\n\n' +
       '----------------------\n' +

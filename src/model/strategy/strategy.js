@@ -30,14 +30,11 @@ Strategy.getStrategyOneText = function(cartItems) {
   });
 
   _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+    if(!brandCartItems) {
+      singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+      singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+    }
   });
-  if(brandCartItems) {
-    promotionText += brandDiscountText;
-  } else {
-    promotionText += singleDiscountText;
-  }
 
   noPromotionCartItems = Strategy.getNoPromotionCartItems(cartItems);
 
@@ -121,7 +118,6 @@ Strategy.getStrategyThreeText = function (cartItems) {
 
   wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(cartItems, 100, 5, '云山苹果');
   promotionText += wholeFullReductionText;
-
   return promotionText;
 };
 
@@ -155,7 +151,6 @@ Strategy.getStrategyFourText = function(cartItems) {
   promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, '云山', 100, 2);
 
   promotionText += WholeDiscount.wholeDiscountToString(cartItems, 0.9, '雪碧');
-
   return promotionText;
 };
 

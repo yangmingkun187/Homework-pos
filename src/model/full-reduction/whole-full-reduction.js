@@ -24,6 +24,12 @@ WholeFullReduction.getWholeFullReductionSaved = function (cartItems, refPrice, s
   });
   savedMoney = parseInt(totalMoney / refPrice) * savedPrice;
 
+  _.forEach(cartItems, function(cartItem) {
+    if(cartItem.getName() !== noPromotion) {
+    cartItem.savedMoney += savedMoney / (cartItems.length - 1);
+    }
+  });
+
   return savedMoney.toFixed(2);
 };
 
