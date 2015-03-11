@@ -26,13 +26,13 @@ Strategy.getStrategyOneText = function(cartItems) {
 
   _.forEach(brandPromotions, function(brandPromotion) {
     brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    brandDiscountText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+    promotionText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
   });
 
   _.forEach(singlePromotions, function(singlePromotion) {
     if(!brandCartItems) {
       singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-      singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+      promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
     }
   });
 
