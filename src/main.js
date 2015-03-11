@@ -2,7 +2,7 @@ var Scanner = require('./model/scanner');
 var Cart = require('./model/cart');
 var _ = require('lodash');
 
-(function printInventory() {
+function printInventory() {
   var tags =
   [
   { 'ITEM000000' : 20 },
@@ -21,4 +21,6 @@ var _ = require('lodash');
   });
 
   console.log(cart.printText(StrategyType));
-})();
+}
+
+printInventory();
