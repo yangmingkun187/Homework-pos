@@ -14,25 +14,43 @@ function Strategy() {
 
 }
 
+Strategy.getBrandPromotion = function(cartItems) {
+  var BrandPromotion = {};
+  var brandCartItems = [];
+  var promotionInfos = '';
+  brandPromotions = Promotion.loadBrandPromotions();
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    promotionInfos += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+  BrandPromotion = {cartItem : brandCartItems,
+                        infos : promotionInfos};
+  return BrandPromotion;
+};
+
+Strategy.getSinglePromotion = function(cartItems) {
+  var singlePromotion = {};
+  var singleCartItem = {};
+  var promotionInfos = '';
+  singlePromotions = Promotion.loadSinglePromotions();
+  _.forEach(singlePromotions, function(singlePromotion) {
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    promotionInfos += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+  });
+  singlePromotion = {cartItem : singleCartItem,
+                         infos : promotionInfos};
+  return singlePromotion;
+};
+
 Strategy.getStrategyOneText = function(cartItems) {
   var promotionText = '';
   var brandCartItems = [];
   var noPromotionCartItems = [];
+  promotionText += Strategy.getBrandPromotion(cartItems).infos;
 
-  brandPromotions = Promotion.loadBrandPromotions();
-  singlePromotions = Promotion.loadSinglePromotions();
-
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
-
-  _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    if(!_.contains(brandCartItems, singleCartItem)) {
-      promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
-    }
-  });
+  if(!_.contains(Strategy.getBrandPromotion(cartItems).cartItem, Strategy.getSinglePromotion(cartItems).cartItem)) {
+    promotionText += Strategy.getSinglePromotion.infos;
+  }
 
   noPromotionCartItems = Strategy.getNoPromotionCartItems(cartItems);
 
@@ -108,8 +126,6 @@ Strategy.getStrategyThreeText = function (cartItems) {
 };
 
 Strategy.getStrategyFourText = function(cartItems) {
-  var brandDiscountText = '';
-  var singleDiscountText = '';
   var promotionText = '';
   var wholeFullReductionText = '';
   var brandFRCartItems = [];
@@ -119,16 +135,13 @@ Strategy.getStrategyFourText = function(cartItems) {
 
   _.forEach(singlePromotions, function(singlePromotion) {
     singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    singleDiscountText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+    promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
   });
 
   _.forEach(brandPromotions, function(brandPromotion) {
     brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    brandDiscountText += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+    promotionText += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
   });
-
-  promotionText += singleDiscountText;
-  promotionText += brandDiscountText;
 
   singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, '果粒橙');
   promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, '果粒橙', 100, 5);
