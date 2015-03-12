@@ -9,8 +9,6 @@ BrandDiscount.getBrandDiscountSaved = function(brandCartItems, rate) {
 
   _.forEach(brandCartItems, function(cartItem) {
     brandDiscountSaved += (cartItem.getPrice() * cartItem.count - cartItem.savedMoney) * (1 - rate);
-  });
-  _.forEach(brandCartItems, function(cartItem) {
     cartItem.savedMoney += (cartItem.getPrice() * cartItem.count - cartItem.savedMoney) * (1 - rate);
   });
 
