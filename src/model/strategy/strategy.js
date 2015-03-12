@@ -15,7 +15,6 @@ function Strategy() {
 }
 
 Strategy.getBrandPromotion = function(cartItems) {
-  var BrandPromotion = {};
   var brandCartItems = [];
   var promotionInfos = '';
   brandPromotions = Promotion.loadBrandPromotions();
@@ -23,13 +22,10 @@ Strategy.getBrandPromotion = function(cartItems) {
     brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
     promotionInfos += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
   });
-  BrandPromotion = {cartItem : brandCartItems,
-                        infos : promotionInfos};
-  return BrandPromotion;
+  return {cartItem : brandCartItems, infos : promotionInfos};
 };
 
 Strategy.getSinglePromotion = function(cartItems) {
-  var singlePromotion = {};
   var singleCartItem = {};
   var promotionInfos = '';
   singlePromotions = Promotion.loadSinglePromotions();
@@ -37,9 +33,36 @@ Strategy.getSinglePromotion = function(cartItems) {
     singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
     promotionInfos += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
   });
-  singlePromotion = {cartItem : singleCartItem,
-                         infos : promotionInfos};
-  return singlePromotion;
+  return {cartItem : singleCartItem, infos : promotionInfos};
+};
+
+Strategy.getBrandFRPromotion = function(cartItems) {
+  var brandFRCartItems = [];
+  var promotionInfos = '';
+  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
+  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
+    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
+    promotionInfos += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
+  });
+  return {cartItem : brandFRCartItems, infos : promotionInfos};
+};
+
+Strategy.getSingleFRPromotion = function(cartItems) {
+  var singleFRPromotion = {};
+  var singleFRCartItems = {};
+  var promotionInfos = '';
+  singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
+  _.forEach(singleFRPromotions, function(singleFRPromotion) {
+    singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
+    promotionInfos += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
+  });
+  return {cartItem : singleFRCartItem, infos : promotionInfos};
+};
+
+Strategy.removeCartItemSavedMoney = function(cartItems) {
+  _.forEach(cartItems, function(cartItem) {
+    cartItem.savedMoney = 0;
+  });
 };
 
 Strategy.getStrategyOneText = function(cartItems) {
@@ -53,46 +76,26 @@ Strategy.getStrategyOneText = function(cartItems) {
   }
 
   noPromotionCartItems = Strategy.getNoPromotionCartItems(cartItems);
-
-  wholeFullReductionText = WholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
-  promotionText += wholeFullReductionText;
+  promotionText += WholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
   return promotionText;
 };
 
 Strategy.getStrategyTwoText = function(cartItems) {
   var promotionText = '';
-  var brandFRCartItems = [];
-  var noPromotionCartItems = [];
+  var singlePromotion = {};
   var newSingleCartItem = [];
 
-  brandPromotions = Promotion.loadBrandPromotions();
-  singlePromotions = Promotion.loadSinglePromotions();
-  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
-  singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
+  singlePromotion = Strategy.getSinglePromotion(cartItems);
+  brandPromotion = Strategy.getBrandPromotion(cartItems);
 
-  _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
-  });
+  newSingleCartItem.push(singlePromotion.cartItem);
+  var newBrandCartItems = _.difference(brandPromotion.cartItem, newSingleCartItem);
+  Strategy.removeCartItemSavedMoney(newBrandCartItems);
 
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    newSingleCartItem.push(singleCartItem);
-
-    var newBrandCartItem = _.difference(brandCartItems, newSingleCartItem);
-    promotionText += BrandDiscount.brandDiscountToString(newBrandCartItem, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
-
-  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
-    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
-    promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
-
-  });
-
-  _.forEach(singleFRPromotions, function(singleFRPromotion) {
-    singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
-    promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
-  });
+  promotionText += singlePromotion.infos;
+  promotionText += Strategy.getBrandPromotion(newBrandCartItems).infos;
+  promotionText += Strategy.getBrandFRPromotion(cartItems).infos;
+  promotionText += Strategy.getSingleFRPromotion(cartItems).infos;
 
   return promotionText;
 };
