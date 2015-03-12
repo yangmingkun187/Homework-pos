@@ -6,7 +6,7 @@ Discount.prototype.getDiscountSaved = function () {
 
 };
 
-Discount.prototype.getDisocuntInfos = function () {
+Discount.prototype.discountToString = function () {
 
 };
 

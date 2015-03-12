@@ -25,6 +25,17 @@ Strategy.getBrandPromotion = function(cartItems) {
   return {cartItem : brandCartItems, infos : promotionInfos};
 };
 
+Strategy.getRefBrandPromotion = function(cartItems) {
+  var brandCartItems = [];
+  var promotionInfos = '';
+  brandPromotions = Promotion.loadBrandPromotions();
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    promotionInfos += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+  return {cartItem : brandCartItems, infos : promotionInfos};
+};
+
 Strategy.getSinglePromotion = function(cartItems) {
   var singleCartItem = {};
   var promotionInfos = '';
@@ -96,7 +107,6 @@ Strategy.getStrategyTwoText = function(cartItems) {
   promotionText += Strategy.getBrandPromotion(newBrandCartItems).infos;
   promotionText += Strategy.getBrandFRPromotion(cartItems).infos;
   promotionText += Strategy.getSingleFRPromotion(cartItems).infos;
-
   return promotionText;
 };
 
@@ -104,26 +114,9 @@ Strategy.getStrategyThreeText = function (cartItems) {
   var promotionText = '';
   var brandFRCartItems = [];
 
-  brandPromotions = Promotion.loadBrandPromotions();
-  singlePromotions = Promotion.loadSinglePromotions();
-
-  _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
-  });
-
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionText += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
-
-  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
-
-  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
-    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
-    promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
-  });
-
+  promotionText += Strategy.getSinglePromotion(cartItems).infos;
+  promotionText += Strategy.getBrandPromotion(cartItems).infos;
+  promotionText += Strategy.getBrandFRPromotion(cartItems).infos;
   promotionText += WholeFullReduction.wholeFullReductionToString(cartItems, 100, 5, '云山苹果');
   return promotionText;
 };
@@ -133,18 +126,8 @@ Strategy.getStrategyFourText = function(cartItems) {
   var wholeFullReductionText = '';
   var brandFRCartItems = [];
 
-  brandPromotions = Promotion.loadBrandPromotions();
-  singlePromotions = Promotion.loadSinglePromotions();
-
-  _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    promotionText += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
-  });
-
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionText += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
+  promotionText += Strategy.getSinglePromotion(cartItems).infos;
+  promotionText += Strategy.getRefBrandPromotion(cartItems).infos;
 
   singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, '果粒橙');
   promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, '果粒橙', 100, 5);
