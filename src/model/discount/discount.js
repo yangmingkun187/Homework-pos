@@ -1,5 +1,5 @@
-function Disount() {
-
+function Discount(cartItems) {
+  this.cartItems = cartItems;
 }
 
 Discount.prototype.getDiscountSaved = function () {

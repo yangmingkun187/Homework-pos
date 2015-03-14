@@ -14,68 +14,6 @@ function Strategy() {
 
 }
 
-Strategy.getBrandPromotion = function(cartItems) {
-  var brandCartItems = [];
-  var promotionInfos = '';
-  brandPromotions = Promotion.loadBrandPromotions();
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionInfos += BrandDiscount.brandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
-  return {cartItem : brandCartItems, infos : promotionInfos};
-};
-
-Strategy.getRefBrandPromotion = function(cartItems) {
-  var brandCartItems = [];
-  var promotionInfos = '';
-  brandPromotions = Promotion.loadBrandPromotions();
-  _.forEach(brandPromotions, function(brandPromotion) {
-    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionInfos += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
-  });
-  return {cartItem : brandCartItems, infos : promotionInfos};
-};
-
-Strategy.getSinglePromotion = function(cartItems) {
-  var singleCartItem = {};
-  var promotionInfos = '';
-  singlePromotions = Promotion.loadSinglePromotions();
-  _.forEach(singlePromotions, function(singlePromotion) {
-    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    promotionInfos += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
-  });
-  return {cartItem : singleCartItem, infos : promotionInfos};
-};
-
-Strategy.getBrandFRPromotion = function(cartItems) {
-  var brandFRCartItems = [];
-  var promotionInfos = '';
-  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
-  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
-    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
-    promotionInfos += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
-  });
-  return {cartItem : brandFRCartItems, infos : promotionInfos};
-};
-
-Strategy.getSingleFRPromotion = function(cartItems) {
-  var singleFRPromotion = {};
-  var singleFRCartItems = {};
-  var promotionInfos = '';
-  singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
-  _.forEach(singleFRPromotions, function(singleFRPromotion) {
-    singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
-    promotionInfos += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
-  });
-  return {cartItem : singleFRCartItem, infos : promotionInfos};
-};
-
-Strategy.removeCartItemSavedMoney = function(cartItems) {
-  _.forEach(cartItems, function(cartItem) {
-    cartItem.savedMoney = 0;
-  });
-};
-
 Strategy.getStrategyOneText = function(cartItems) {
   var promotionText = '';
   var brandCartItems = [];
@@ -137,6 +75,69 @@ Strategy.getStrategyFourText = function(cartItems) {
 
   promotionText += WholeDiscount.wholeDiscountToString(cartItems, 0.9, '雪碧');
   return promotionText;
+};
+
+Strategy.getBrandPromotion = function(cartItems) {
+  var brandCartItems = [];
+  var promotionInfos = '';
+  brandPromotions = Promotion.loadBrandPromotions();
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    var brandDiscount = new BrandDiscount(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+    promotionInfos += brandDiscount.discountToString();
+  });
+  return {cartItem : brandCartItems, infos : promotionInfos};
+};
+
+Strategy.getRefBrandPromotion = function(cartItems) {
+  var brandCartItems = [];
+  var promotionInfos = '';
+  brandPromotions = Promotion.loadBrandPromotions();
+  _.forEach(brandPromotions, function(brandPromotion) {
+    brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
+    promotionInfos += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+  });
+  return {cartItem : brandCartItems, infos : promotionInfos};
+};
+
+Strategy.getSinglePromotion = function(cartItems) {
+  var singleCartItem = {};
+  var promotionInfos = '';
+  singlePromotions = Promotion.loadSinglePromotions();
+  _.forEach(singlePromotions, function(singlePromotion) {
+    singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
+    promotionInfos += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+  });
+  return {cartItem : singleCartItem, infos : promotionInfos};
+};
+
+Strategy.getBrandFRPromotion = function(cartItems) {
+  var brandFRCartItems = [];
+  var promotionInfos = '';
+  fullReductionPromotions = FullReductionPromotion.loadFullReducePromotions();
+  _.forEach(fullReductionPromotions, function(fullReductionPromotion) {
+    brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, fullReductionPromotion.promotionTag);
+    promotionInfos += BrandFullReduction.brandFullReductionToString(brandFRCartItems, fullReductionPromotion.promotionTag, fullReductionPromotion.refPrice, fullReductionPromotion.savedPrice);
+  });
+  return {cartItem : brandFRCartItems, infos : promotionInfos};
+};
+
+Strategy.getSingleFRPromotion = function(cartItems) {
+  var singleFRPromotion = {};
+  var singleFRCartItems = {};
+  var promotionInfos = '';
+  singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
+  _.forEach(singleFRPromotions, function(singleFRPromotion) {
+    singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
+    promotionInfos += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
+  });
+  return {cartItem : singleFRCartItem, infos : promotionInfos};
+};
+
+Strategy.removeCartItemSavedMoney = function(cartItems) {
+  _.forEach(cartItems, function(cartItem) {
+    cartItem.savedMoney = 0;
+  });
 };
 
 Strategy.getBrandFRCartItems = function (cartItems, brand) {
