@@ -206,5 +206,4 @@ Strategy.getNoPromotionCartItems = function (cartItems) {
   return noPromotionCartItems;
 };
 
-
 module.exports = Strategy;
