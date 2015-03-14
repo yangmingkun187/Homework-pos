@@ -68,7 +68,8 @@ Strategy.getStrategyFourText = function(cartItems) {
   promotionText += Strategy.getRefBrandPromotion(cartItems).infos;
 
   singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, '果粒橙');
-  promotionText += SingleFullReduction.singleFullReductionToString(singleFRCartItem, '果粒橙', 100, 5);
+  var singleFullReduction = new SingleFullReduction(singleFRCartItem, '果粒橙', 100, 5);
+  promotionText += singleFullReduction.discountToString();
 
   brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, '云山');
   var brandFullReduction = new BrandFullReduction(brandFRCartItems, '云山', 100, 2);
@@ -134,7 +135,8 @@ Strategy.getSingleFRPromotion = function(cartItems) {
   singleFRPromotions = FullReductionPromotion.loadSingleFRPromotions();
   _.forEach(singleFRPromotions, function(singleFRPromotion) {
     singleFRCartItem = Strategy.getSingleFRCartItem(cartItems, singleFRPromotion.promotionTag);
-    promotionInfos += SingleFullReduction.singleFullReductionToString(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
+    var singleFullReduction = new SingleFullReduction(singleFRCartItem, singleFRPromotion.promotionTag, singleFRPromotion.refPrice, singleFRPromotion.savedPrice);
+    promotionInfos += singleFullReduction.discountToString();
   });
   return {cartItem : singleFRCartItem, infos : promotionInfos};
 };
