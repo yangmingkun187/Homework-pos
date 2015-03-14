@@ -8,8 +8,8 @@ describe('SingleDiscount', function() {
       var Item = require('../src/model/item');
 
       var cartItem = new CartItem(Item.loadAllItem()[0], 20);
-
-      var text = SingleDiscount.singleDiscountToString(cartItem, '可口可乐350ml', '单品打折', 0.95);
+      var singleDiscount = new SingleDiscount(cartItem, '可口可乐350ml', 0.95);
+      var text = singleDiscount.discountToString();
       expect(text).toBe('名称：可口可乐350ml单品打折，金额：3.00元\n');
     });
   });

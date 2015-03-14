@@ -107,7 +107,8 @@ Strategy.getSinglePromotion = function(cartItems) {
   singlePromotions = Promotion.loadSinglePromotions();
   _.forEach(singlePromotions, function(singlePromotion) {
     singleCartItem = Strategy.getSingleDiscountCartItem(cartItems, singlePromotion.discountTag);
-    promotionInfos += SingleDiscount.singleDiscountToString(singleCartItem, singlePromotion.discountTag, singleCartItem.promotion, singlePromotion.discountRate);
+    var singleDiscount = new SingleDiscount(singleCartItem, singlePromotion.discountTag, singlePromotion.discountRate);
+    promotionInfos += singleDiscount.discountToString();
   });
   return {cartItem : singleCartItem, infos : promotionInfos};
 };
