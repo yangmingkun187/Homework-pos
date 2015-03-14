@@ -9,8 +9,8 @@ describe('brandFullReduction', function() {
 
       brandFRCartItems = [new CartItem(Item.loadAllItem()[7], 30),
                           new CartItem(Item.loadAllItem()[8], 25)];
-
-      var text = BrandFullReduction.brandFullReductionToString(brandFRCartItems, '康师傅', 100, 2);
+      var brandFullReduction = new BrandFullReduction(brandFRCartItems, '康师傅', 100, 2);
+      var text = brandFullReduction.discountToString();
       expect(text).toBe('名称：康师傅品牌满100减2，金额：4.00元\n');
     });
   });
