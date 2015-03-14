@@ -1,28 +1,37 @@
 var _ = require('lodash');
+var Discount = require('../discount');
 
-function WholeFullReduction() {
-
+function WholeFullReduction(cartItems, refPrice, savedPrice, noPromotion) {
+  Discount.call(this, cartItems);
+  this.refPrice = refPrice;
+  this.savedPrice = savedPrice;
+  this.noPromotion = noPromotion;
 }
 
-WholeFullReduction.wholeFullReductionToString = function (cartItems, refPrice, savedPrice, noPromotion) {
+WholeFullReduction.prototype = Object.create(Discount.prototype);
+WholeFullReduction.prototype.constructor = WholeFullReduction;
+
+WholeFullReduction.prototype.discountToString = function () {
   var text = '';
-  var savedMoney = WholeFullReduction.getWholeFullReductionSaved(cartItems, refPrice, savedPrice, noPromotion);
+  var savedMoney = this.getDiscountSaved();
   if(savedMoney > 0) {
-    text += '名称：满' + refPrice + '减' + savedPrice + '，金额：' + savedMoney + '元\n';
+    text += '名称：满' + this.refPrice + '减' + this.savedPrice + '，金额：' + savedMoney + '元\n';
   }
   return text;
 };
 
-WholeFullReduction.getWholeFullReductionSaved = function (cartItems, refPrice, savedPrice, noPromotion) {
+WholeFullReduction.prototype.getDiscountSaved = function () {
   var savedMoney = 0;
   var totalMoney = 0;
+  var noPromotion = this.noPromotion;
+  var cartItems = this.cartItems;
 
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() !== noPromotion) {
       totalMoney += cartItem.getPrice() * cartItem.count - cartItem.savedMoney;
     }
   });
-  savedMoney = parseInt(totalMoney / refPrice) * savedPrice;
+  savedMoney = parseInt(totalMoney / this.refPrice) * this.savedPrice;
 
   _.forEach(cartItems, function(cartItem) {
     if(cartItem.getName() !== noPromotion) {

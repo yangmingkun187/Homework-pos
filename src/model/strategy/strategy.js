@@ -25,7 +25,8 @@ Strategy.getStrategyOneText = function(cartItems) {
   }
 
   noPromotionCartItems = Strategy.getNoPromotionCartItems(cartItems);
-  promotionText += WholeFullReduction.wholeFullReductionToString(noPromotionCartItems, 100, 3, '康师傅方便面');
+  var wholeFullReduction = new WholeFullReduction(noPromotionCartItems, 100, 3, '康师傅方便面');
+  promotionText += wholeFullReduction.discountToString();
   return promotionText;
 };
 
@@ -55,7 +56,8 @@ Strategy.getStrategyThreeText = function (cartItems) {
   promotionText += Strategy.getSinglePromotion(cartItems).infos;
   promotionText += Strategy.getBrandPromotion(cartItems).infos;
   promotionText += Strategy.getBrandFRPromotion(cartItems).infos;
-  promotionText += WholeFullReduction.wholeFullReductionToString(cartItems, 100, 5, '云山苹果');
+  var wholeFullReduction = new WholeFullReduction(cartItems, 100, 5, '云山苹果');
+  promotionText += wholeFullReduction.discountToString();
   return promotionText;
 };
 
