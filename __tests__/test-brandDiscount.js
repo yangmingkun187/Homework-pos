@@ -3,7 +3,7 @@ jest.autoMockOff();
 describe('BrandDiscount', function() {
   describe('#discountToString', function() {
     it('it should return corrcet string', function() {
-      var BrandDiscount = require('../src/model/discount/brandDiscount');
+      var BrandDiscount = require('../src/model/cartItemDiscount/brandDiscount');
       var CartItem = require('../src/model/cart-item');
       var Item = require('../src/model/item');
 

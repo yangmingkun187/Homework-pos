@@ -1,11 +1,14 @@
 var _ = require('lodash');
-var Discount = require('./discount');
+var Discount = require('../discount');
 
 function WholeDiscount(cartItems, rate, noDiscount) {
   Discount.call(this, cartItems);
   this.rate = rate;
   this.noDiscount = noDiscount;
 }
+
+WholeDiscount.prototype = Object.create(Discount.prototype);
+WholeDiscount.prototype.constructor = WholeDiscount;
 
 WholeDiscount.prototype.discountToString = function () {
   var savedMoney = this.getDiscountSaved();
