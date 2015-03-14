@@ -73,7 +73,8 @@ Strategy.getStrategyFourText = function(cartItems) {
   brandFRCartItems = Strategy.getBrandFRCartItems(cartItems, '云山');
   promotionText += BrandFullReduction.brandFullReductionToString(brandFRCartItems, '云山', 100, 2);
 
-  promotionText += WholeDiscount.wholeDiscountToString(cartItems, 0.9, '雪碧');
+  var wholeDiscount = new WholeDiscount(cartItems, 0.9, '雪碧');
+  promotionText += wholeDiscount.discountToString();
   return promotionText;
 };
 
