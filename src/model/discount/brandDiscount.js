@@ -23,10 +23,11 @@ BrandDiscount.prototype.getDiscountSaved = function() {
 
 BrandDiscount.prototype.getOtherBrandDiscountSaved = function() {
   var brandDiscountSaved = 0;
+  var rate = this.rate;
 
   _.forEach(this.cartItems, function(cartItem) {
-    cartItem.savedMoney += cartItem.getPrice() * cartItem.count * (1 - this.rate);
-    brandDiscountSaved += cartItem.getPrice() * cartItem.count * (1 - this.rate);
+    cartItem.savedMoney += cartItem.getPrice() * cartItem.count * (1 - rate);
+    brandDiscountSaved += cartItem.getPrice() * cartItem.count * (1 - rate);
   });
 
   return brandDiscountSaved.toFixed(2);

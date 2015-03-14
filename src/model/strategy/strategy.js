@@ -95,7 +95,8 @@ Strategy.getRefBrandPromotion = function(cartItems) {
   brandPromotions = Promotion.loadBrandPromotions();
   _.forEach(brandPromotions, function(brandPromotion) {
     brandCartItems = Strategy.getBrandDiscountCartItems(cartItems, brandPromotion.discountTag);
-    promotionInfos += BrandDiscount.otherBrandDiscountToString(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+    var brandDiscount = new BrandDiscount(brandCartItems, brandPromotion.discountTag, brandPromotion.discountRate);
+    promotionInfos += brandDiscount.otherBrandDiscountToString();
   });
   return {cartItem : brandCartItems, infos : promotionInfos};
 };
